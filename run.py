@@ -2,6 +2,7 @@
 
 import logging
 import os
+from dotenv import load_dotenv
 from colorama import Fore
 from TwitchChannelPointsMiner import TwitchChannelPointsMiner
 from TwitchChannelPointsMiner.logger import LoggerSettings, ColorPalette
@@ -11,6 +12,7 @@ from TwitchChannelPointsMiner.classes.Settings import Priority, Events, Follower
 from TwitchChannelPointsMiner.classes.entities.Bet import Strategy, BetSettings, Condition, OutcomeKeys, FilterCondition, DelayMode
 from TwitchChannelPointsMiner.classes.entities.Streamer import Streamer, StreamerSettings
 
+load_dotenv()
 twitch_miner = TwitchChannelPointsMiner(
     username=os.getenv("TWITCH_USERNAME"),
     password=os.getenv("TWITCH_PASSWORD"),
