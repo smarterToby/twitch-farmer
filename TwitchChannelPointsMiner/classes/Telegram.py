@@ -24,6 +24,6 @@ class Telegram(object):
                     "chat_id": self.chat_id,
                     "text": dedent(message),
                     "disable_web_page_preview": True,  # include link to twitch streamer?
-                    "disable_notification": self.disable_notification,  # no sound, notif just in tray
+                    "disable_notification": self.disable_notification,  # no sound, notify just in tray
                 },
             )

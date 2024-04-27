@@ -75,10 +75,6 @@ class LoggerSettings:
         "color_palette",
         "auto_clear",
         "telegram",
-        "discord",
-        "webhook",
-        "matrix",
-        "pushover",
         "username"
     ]
 
@@ -95,10 +91,6 @@ class LoggerSettings:
         color_palette: ColorPalette = ColorPalette(),
         auto_clear: bool = True,
         telegram: Telegram or None = None,
-        discord: Discord or None = None,
-        webhook: Webhook or None = None,
-        matrix: Matrix or None = None,
-        pushover: Pushover or None = None,
         username: str or None = None
     ):
         self.save = save
@@ -112,10 +104,6 @@ class LoggerSettings:
         self.color_palette = color_palette
         self.auto_clear = auto_clear
         self.telegram = telegram
-        self.discord = discord
-        self.webhook = webhook
-        self.matrix = matrix
-        self.pushover = pushover
         self.username = username
 
 
@@ -188,11 +176,6 @@ class GlobalFormatter(logging.Formatter):
 
         if hasattr(record, "event"):
             self.telegram(record)
-            self.discord(record)
-            self.webhook(record)
-            self.matrix(record)
-            self.pushover(record)
-
             if self.settings.colored is True:
                 record.msg = (
                     f"{self.settings.color_palette.get(record.event)}{record.msg}"
@@ -203,62 +186,12 @@ class GlobalFormatter(logging.Formatter):
     def telegram(self, record):
         skip_telegram = False if hasattr(
             record, "skip_telegram") is False else True
-
         if (
             self.settings.telegram is not None
             and skip_telegram is False
             and self.settings.telegram.chat_id != 123456789
         ):
             self.settings.telegram.send(record.msg, record.event)
-
-    def discord(self, record):
-        skip_discord = False if hasattr(
-            record, "skip_discord") is False else True
-
-        if (
-            self.settings.discord is not None
-            and skip_discord is False
-            and self.settings.discord.webhook_api
-            != "https://discord.com/api/webhooks/0123456789/0a1B2c3D4e5F6g7H8i9J"
-        ):
-            self.settings.discord.send(record.msg, record.event)
-
-    def webhook(self, record):
-        skip_webhook = False if hasattr(
-            record, "skip_webhook") is False else True
-
-        if (
-            self.settings.webhook is not None
-            and skip_webhook is False
-            and self.settings.webhook.endpoint
-            != "https://example.com/webhook"
-        ):
-            self.settings.webhook.send(record.msg, record.event)
-
-    def matrix(self, record):
-        skip_matrix = False if hasattr(
-            record, "skip_matrix") is False else True
-
-        if (
-            self.settings.matrix is not None
-            and skip_matrix is False
-            and self.settings.matrix.room_id != "..."
-            and self.settings.matrix.access_token
-        ):
-            self.settings.matrix.send(record.msg, record.event)
-
-    def pushover(self, record):
-        skip_pushover = False if hasattr(
-            record, "skip_pushover") is False else True
-
-        if (
-            self.settings.pushover is not None
-            and skip_pushover is False
-            and self.settings.pushover.userkey != "YOUR-ACCOUNT-TOKEN"
-            and self.settings.pushover.token != "YOUR-APPLICATION-TOKEN"
-        ):
-            self.settings.pushover.send(record.msg, record.event)
-
 
 def configure_loggers(username, settings):
     if settings.colored is True:
